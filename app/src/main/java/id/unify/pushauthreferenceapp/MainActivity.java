@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Temporarily hardcoded SDK key and user identifier
         final String sdkKey = "https://be77a55d572220cd7180e5dc0460476d@config.unify.id";
-        final String user = "398ytq9p43qreutp9udfojgdsl";
+        final String user = "afkhadslfjsaf";
 
         // Initialize an instance of the PushAuth SDK
         List modules = new ArrayList<>();
