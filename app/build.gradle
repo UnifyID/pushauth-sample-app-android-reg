@@ -32,3 +32,5 @@ dependencies {
     implementation 'id.unify.sdk:sdk-core:1.1.0'
     implementation 'id.unify.sdk:sdk-pushauth:1.1.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "20297640892",
+    "firebase_url": "https://pushauth-reference-app.firebaseio.com",
+    "project_id": "pushauth-reference-app",
+    "storage_bucket": "pushauth-reference-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20297640892:android:9ba7c4a26c9f41db7d59b9",
+        "android_client_info": {
+          "package_name": "id.unify.pushauthreferenceapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "20297640892-nn8mg4plqs9apisoccv3ich5sj8pbipm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "id.unify.pushauthreferenceapp",
+            "certificate_hash": "2537769018ca94c7161590f8902d112031e64424"
+          }
+        },
+        {
+          "client_id": "20297640892-d5c9m6i0qft106b9p6n9l7pf16ae4rln.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSTCcZ58k3V1ycREcDAtjRk-Nz5NSo0YQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "20297640892-d5c9m6i0qft106b9p6n9l7pf16ae4rln.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

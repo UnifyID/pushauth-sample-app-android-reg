@@ -1,10 +1,8 @@
 package id.unify.pushauthreferenceapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,30 +20,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Temporarily hardcoded SDK key and user identifier
-        String sdkKey = "https://0ecee7dda4dc56e1cc7d04088d51993b@config.unify.id";
-        String user = "398ytq9p43qreutp9udfojgdsl";
+        final String sdkKey = "https://be77a55d572220cd7180e5dc0460476d@config.unify.id";
+        final String user = "398ytq9p43qreutp9udfojgdsl";
 
-        /*
         // Initialize an instance of the PushAuth SDK
         List modules = new ArrayList<>();
         modules.add(new UnifyIDPushAuthModule());
         UnifyID.initialize(getApplicationContext(), sdkKey, user, modules, new CompletionHandler() {
             @Override
             public void onCompletion() {
-                // Initialization was successful
-                Context context = getApplicationContext();
-                CharSequence text = "Initialization successful!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                // Initialization successful
+                Log.d("info", "Initialization successful");
             }
 
             @Override
             public void onFailure(UnifyIDException e) {
                 // Initialization failed
+                Log.d("info", "Initialization failed");
             }
         });
-        */
     }
 }
