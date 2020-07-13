@@ -13,6 +13,7 @@ import id.unify.sdk.core.UnifyIDException;
 import id.unify.sdk.pushauth.UnifyIDPushAuthModule;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,17 +27,18 @@ public class MainActivity extends AppCompatActivity {
         // Initialize an instance of the PushAuth SDK
         List modules = new ArrayList<>();
         modules.add(new UnifyIDPushAuthModule());
+
         UnifyID.initialize(getApplicationContext(), sdkKey, user, modules, new CompletionHandler() {
             @Override
             public void onCompletion() {
                 // Initialization successful
-                Log.d("info", "Initialization successful");
+                Log.d(TAG, "Initialization successful");
             }
 
             @Override
             public void onFailure(UnifyIDException e) {
                 // Initialization failed
-                Log.d("info", "Initialization failed");
+                Log.e(TAG, "Initialization failed", e);
             }
         });
     }
