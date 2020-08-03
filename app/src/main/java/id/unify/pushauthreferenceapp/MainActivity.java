@@ -24,6 +24,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // TEMPORARY: SDK Key fill for testing
+        EditText sdkKeyInput = (EditText) findViewById(R.id.SDKKeyInput);
+        sdkKeyInput.setText("https://be77a55d572220cd7180e5dc0460476d@config.unify.id");
+
         Button confirmButton = (Button) findViewById(R.id.ConfirmButton);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
