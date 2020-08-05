@@ -13,13 +13,22 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="163dp"
         android:background="?attr/colorPrimaryDark"
-        android:minHeight="?attr/actionBarSize"
+        android:minHeight="50dp"
         app:layout_constraintBottom_toTopOf="@+id/WaitingTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="@android:color/white"
-        tools:ignore="MissingConstraints"></androidx.appcompat.widget.Toolbar>
+        tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:id="@+id/UnifyIDLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"
+            android:src="@drawable/unifyid_logo" />
+
+    </androidx.appcompat.widget.Toolbar>
 
     <TextView
         android:id="@+id/WaitingTitle"
