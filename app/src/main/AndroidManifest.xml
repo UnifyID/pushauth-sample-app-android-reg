@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright © 2020 UnifyID, Inc. All rights reserved.
+  ~ Unauthorized copying or excerpting via any medium is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="id.unify.pushauthreferenceapp">
