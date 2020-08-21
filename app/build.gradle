@@ -1,3 +1,9 @@
+/*
+ * Copyright © 2020 UnifyID, Inc. All rights reserved.
+ * Unauthorized copying or excerpting via any medium is strictly prohibited.
+ * Proprietary and confidential.
+ */
+
 apply plugin: 'com.android.application'
 
 android {
@@ -31,6 +37,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'id.unify.sdk:sdk-core:1.1.0'
     implementation 'id.unify.sdk:sdk-pushauth:1.1.0'
+    implementation 'com.google.firebase:firebase-analytics:17.5.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
