@@ -24,13 +24,13 @@ public class WaitingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_waiting);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.Toolbar);
+        Toolbar toolbar = findViewById(R.id.Toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         Intent intent = getIntent();
         String user = intent.getStringExtra("user");
-        TextView userText = (TextView) findViewById(R.id.UserText);
+        TextView userText = findViewById(R.id.UserText);
         userText.setText("User: " + user);
     }
 
