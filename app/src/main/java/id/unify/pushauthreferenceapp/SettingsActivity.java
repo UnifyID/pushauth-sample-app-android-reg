@@ -6,16 +6,14 @@
 
 package id.unify.pushauthreferenceapp;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
+import id.unify.pushauthreferenceapp.databinding.ActivitySettingsBinding;
 import id.unify.sdk.core.CompletionHandler;
 import id.unify.sdk.core.UnifyID;
 import id.unify.sdk.core.UnifyIDConfig;
@@ -24,50 +22,58 @@ import id.unify.sdk.pushauth.PushAuth;
 
 public class SettingsActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
+    private ActivitySettingsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_settings);
+        binding.confirmBtn.setOnClickListener(confirmButtonListener);
+    }
 
-        Button confirmButton = findViewById(R.id.ConfirmButton);
-        confirmButton.setOnClickListener(confirmButtonListener);
+    private void storeConfiguration(String sdkKey, String user) {
+        Preferences.put(Preferences.SDK_KEY, sdkKey);
+        Preferences.put(Preferences.USER, user);
+    }
+
+    private void showConfirmUI() {
+        binding.confirmBtn.setVisibility(View.GONE);
+        binding.settingActivityPb.setVisibility(View.VISIBLE);
+    }
+
+    private void hideConfirmUI() {
+        binding.confirmBtn.setVisibility(View.VISIBLE);
+        binding.settingActivityPb.setVisibility(View.GONE);
     }
 
     private View.OnClickListener confirmButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            EditText sdkKeyInput = findViewById(R.id.SDKKeyInput);
-            final String sdkKey = sdkKeyInput.getText().toString();
-            EditText userIDInput = findViewById(R.id.UserIDInput);
-            final String user = userIDInput.getText().toString();
+            showConfirmUI();
 
-            // Initialize an instance of the PushAuth SDK
+            final String sdkKey = binding.sdkKeyInput.getText().toString();
+            final String user = binding.userInput.getText().toString();
+
             UnifyID.initialize(getApplicationContext(), sdkKey, user, new CompletionHandler() {
                 @Override
                 public void onCompletion(UnifyIDConfig config) {
-                    Log.d(TAG, "Initialization successful");
-
+                    Log.d(TAG, "UnifyID initialization successful");
                     PushAuth.initialize(getApplicationContext(), config);
-
-                    Intent intent = new Intent(SettingsActivity.this,
-                            WaitingActivity.class);
-                    intent.putExtra("user", user);
-                    startActivity(intent);
+                    storeConfiguration(sdkKey, user);
+                    Utils.showAllPendingPushAuth(PushAuth.getInstance());
+                    finish();
                 }
 
                 @Override
                 public void onFailure(UnifyIDException e) {
-                    Log.e(TAG, "Initialization failed", e);
-
-                    final String errorMessage = "Initialization failed: " + e.getMessage();
+                    Log.e(TAG, "UnifyID initialization failed", e);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(SettingsActivity.this, errorMessage,
-                                    Toast.LENGTH_SHORT).show();
+                            hideConfirmUI();
                         }
                     });
+                    Utils.DisplayUnifyIDException(e, SettingsActivity.this);
                 }
             });
         }
