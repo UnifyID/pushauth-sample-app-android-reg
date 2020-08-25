@@ -51,8 +51,8 @@ public class SettingsActivity extends AppCompatActivity {
         public void onClick(View view) {
             showConfirmUI();
 
-            final String sdkKey = binding.sdkKeyInput.getText().toString();
-            final String user = binding.userInput.getText().toString();
+            final String sdkKey = binding.sdkKeyInput.getText().toString().trim();
+            final String user = binding.userInput.getText().toString().trim();
 
             UnifyID.initialize(getApplicationContext(), sdkKey, user, new CompletionHandler() {
                 @Override
