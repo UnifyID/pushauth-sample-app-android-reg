@@ -79,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity {
                             hideConfirmUI();
                         }
                     });
-                    Utils.DisplayUnifyIDException(e, SettingsActivity.this);
+                    Utils.displayUnifyIDException(e, SettingsActivity.this);
                 }
             });
         }
