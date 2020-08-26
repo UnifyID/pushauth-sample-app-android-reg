@@ -11,7 +11,7 @@ import id.unify.sdk.pushauth.PushAuth;
 import id.unify.sdk.pushauth.PushAuthMessage;
 
 public class Utils {
-    static public void DisplayUnifyIDException(UnifyIDException e, final Activity activity) {
+    static public void displayUnifyIDException(UnifyIDException e, final Activity activity) {
         String msg = "Unknown exception happened, PushAuth feature won't work correctly.";
         switch (e.getErrorCode()) {
             case UnifyIDException.INITIALIZATION_ERROR_INVALID_KEY:
