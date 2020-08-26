@@ -18,18 +18,17 @@ import androidx.databinding.DataBindingUtil;
 
 import com.google.common.base.Strings;
 
-import java.util.List;
-
 import id.unify.pushauthreferenceapp.databinding.ActivityMainBinding;
 import id.unify.sdk.core.CompletionHandler;
 import id.unify.sdk.core.UnifyID;
 import id.unify.sdk.core.UnifyIDConfig;
 import id.unify.sdk.core.UnifyIDException;
 import id.unify.sdk.pushauth.PushAuth;
-import id.unify.sdk.pushauth.PushAuthMessage;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    public static final int SETTING_ACTIVITY_REQUEST_CODE = 10;
+    public static final String SETTING_ACTIVITY_RESULT_KEY = "SDK_INITIALIZED";
 
     private ActivityMainBinding binding;
 
@@ -37,12 +36,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        setup();
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
         setup();
     }
 
@@ -57,11 +50,29 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.SettingsButton) {
             Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-
+            startActivityForResult(intent, SETTING_ACTIVITY_REQUEST_CODE);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == SETTING_ACTIVITY_REQUEST_CODE && data != null) {
+            boolean sdkInitialized = data.getBooleanExtra(SETTING_ACTIVITY_RESULT_KEY,
+                    false);
+            if (sdkInitialized) {
+                String sdkKey = Preferences.getString(Preferences.SDK_KEY);
+                String user = Preferences.getString(Preferences.USER);
+                boolean appConfigured = !Strings.isNullOrEmpty(sdkKey) && !Strings.isNullOrEmpty(user);
+                if (appConfigured) {
+                    showPushAuthInfoContainer(sdkKey, user);
+                } else {
+                    showSetupText();
+                }
+            }
+        }
     }
 
     private void setupToolBar() {

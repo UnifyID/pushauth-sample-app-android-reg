@@ -6,6 +6,7 @@
 
 package id.unify.pushauthreferenceapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -61,6 +62,11 @@ public class SettingsActivity extends AppCompatActivity {
                     PushAuth.initialize(getApplicationContext(), config);
                     storeConfiguration(sdkKey, user);
                     Utils.showAllPendingPushAuth(PushAuth.getInstance());
+
+                    // close activity with result
+                    Intent intent = new Intent();
+                    intent.putExtra(MainActivity.SETTING_ACTIVITY_RESULT_KEY, true);
+                    setResult(MainActivity.SETTING_ACTIVITY_REQUEST_CODE, intent);
                     finish();
                 }
 
