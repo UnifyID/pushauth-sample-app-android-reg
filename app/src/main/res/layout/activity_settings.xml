@@ -39,6 +39,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
+            android:hint="@string/sdk_key_input_hint"
             android:inputType="text" />
 
         <EditText
@@ -48,6 +49,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
+            android:hint="@string/user_input_hint"
             android:inputType="text" />
 
         <Button

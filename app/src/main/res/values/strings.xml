@@ -14,4 +14,6 @@
     <string name="pushauth_info_container_title">Waiting for PushAuth requests</string>
     <string name="configuration_help_title">Configuration</string>
     <string name="configuration_input_hint">PushAuth Key and User</string>
+    <string name="sdk_key_input_hint">SDK Key</string>
+    <string name="user_input_hint">User</string>
 </resources>
