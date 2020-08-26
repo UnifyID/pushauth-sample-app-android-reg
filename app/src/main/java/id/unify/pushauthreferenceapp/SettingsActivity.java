@@ -14,6 +14,8 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import com.google.common.base.Strings;
+
 import id.unify.pushauthreferenceapp.databinding.ActivitySettingsBinding;
 import id.unify.sdk.core.CompletionHandler;
 import id.unify.sdk.core.UnifyID;
@@ -30,6 +32,18 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_settings);
         binding.confirmBtn.setOnClickListener(confirmButtonListener);
+        setup();
+    }
+
+    private void setup() {
+        String existingSdkKey = Preferences.getString(Preferences.SDK_KEY);
+        String existingUser = Preferences.getString(Preferences.USER);
+        if (!Strings.isNullOrEmpty(existingSdkKey)) {
+            binding.sdkKeyInput.setText(existingSdkKey);
+        }
+        if (!Strings.isNullOrEmpty(existingUser)) {
+            binding.userInput.setText(existingUser);
+        }
     }
 
     private void storeConfiguration(String sdkKey, String user) {
