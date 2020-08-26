@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(final UnifyIDException e) {
                 Log.e(TAG, "UnifyID initialization failed", e);
-                Utils.DisplayUnifyIDException(e, MainActivity.this);
+                Utils.displayUnifyIDException(e, MainActivity.this);
             }
         });
     }
