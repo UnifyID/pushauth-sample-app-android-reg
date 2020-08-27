@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 String user = Preferences.getString(Preferences.USER);
                 boolean appConfigured = !Strings.isNullOrEmpty(sdkKey) && !Strings.isNullOrEmpty(user);
                 if (appConfigured) {
-                    showPushAuthInfoContainer(sdkKey, user);
+                    showPushAuthInfoContainer(user);
                 } else {
                     showSetupText();
                 }
@@ -82,13 +82,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void showSetupText() {
         binding.pushauthInfoContainer.setVisibility(View.GONE);
-        binding.setupText.setVisibility(View.VISIBLE);
+        binding.configurationTextContainer.setVisibility(View.VISIBLE);
     }
 
-    private void showPushAuthInfoContainer(String sdkKey, String user) {
-        binding.setupText.setVisibility(View.GONE);
+    private void showPushAuthInfoContainer(String user) {
+        binding.configurationTextContainer.setVisibility(View.GONE);
         binding.pushauthInfoContainer.setVisibility(View.VISIBLE);
-        binding.configuredSdkKey.setText("SDK Key: " + sdkKey);
         binding.configuredUser.setText("User: " + user);
     }
 
@@ -116,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         String user = Preferences.getString(Preferences.USER);
         boolean appConfigured = !Strings.isNullOrEmpty(sdkKey) && !Strings.isNullOrEmpty(user);
         if (appConfigured) {
-            showPushAuthInfoContainer(sdkKey, user);
+            showPushAuthInfoContainer(user);
             if (PushAuth.getInstance() == null) {
                 setupPushAuth(sdkKey, user);
             }

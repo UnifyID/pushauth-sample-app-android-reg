@@ -9,50 +9,65 @@
     <LinearLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="40dp"
-        android:gravity="center"
+        android:layout_margin="10dp"
         android:orientation="vertical"
         tools:context=".SettingsActivity">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/sdk_key_text"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:text="@string/configuration_help_title"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="28sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/configuration_input_hint"
             android:textSize="20sp" />
 
         <EditText
             android:id="@+id/sdk_key_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
+            android:hint="@string/sdk_key_input_hint"
             android:inputType="text" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/user_id_text"
-            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/user_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
+            android:hint="@string/user_input_hint"
             android:inputType="text" />
 
         <Button
             android:id="@+id/confirm_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textAllCaps="false"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:text="@string/confirm_text" />
 
         <ProgressBar
             android:id="@+id/setting_activity_pb"
-            android:visibility="gone"
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:visibility="gone" />
     </LinearLayout>
 </layout>
 

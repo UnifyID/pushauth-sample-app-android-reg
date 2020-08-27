@@ -10,7 +10,10 @@
     <string name="user_id_text">User</string>
     <string name="confirm_text">Confirm</string>
     <string name="header_description">UnifyID Logo</string>
-    <string name="configuration_help_text">The app isn\'t configured yet, please tapping the gear icon above and configure PushAuth SDK key.</string>
-    <string name="pushauth_info_container_title">Waiting for New PushAuth</string>
-    <string name="current_configuration_title_text">Current Configuration</string>
+    <string name="configuration_help_text">Configure your PushAuth SDK key and user by tapping the gear icon above.</string>
+    <string name="pushauth_info_container_title">Waiting for PushAuth requests</string>
+    <string name="configuration_help_title">Configuration</string>
+    <string name="configuration_input_hint">PushAuth Key and User</string>
+    <string name="sdk_key_input_hint">SDK Key</string>
+    <string name="user_input_hint">User</string>
 </resources>
