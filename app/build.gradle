@@ -39,7 +39,7 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'id.unify.sdk:sdk-pushauth:1.3.6'
+    implementation 'id.unify.sdk:sdk-pushauth:1.3.7'
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
 }
 

@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
@@ -24,6 +25,7 @@ import id.unify.sdk.core.UnifyID;
 import id.unify.sdk.core.UnifyIDConfig;
 import id.unify.sdk.core.UnifyIDException;
 import id.unify.sdk.pushauth.PushAuth;
+import id.unify.sdk.pushauth.TokenRegistrationHandler;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -97,7 +99,27 @@ public class MainActivity extends AppCompatActivity {
             public void onCompletion(UnifyIDConfig config) {
                 Log.d(TAG, "UnifyID initialization successful");
                 PushAuth.initialize(getApplicationContext(), config);
-                Utils.showAllPendingPushAuth(PushAuth.getInstance());
+                PushAuth.getInstance().registerPushAuthToken(new TokenRegistrationHandler() {
+                    @Override
+                    public void onComplete() {
+                        Utils.showAllPendingPushAuth(PushAuth.getInstance());
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new AlertDialog
+                                        .Builder(MainActivity.this)
+                                        .setTitle("PushAuth Token Registration Failed")
+                                        .setMessage("PushAuth won't work correctly, please close "
+                                                + "the app and reopen it to recover.")
+                                        .show();
+                            }
+                        });
+                    }
+                });
             }
 
             @Override

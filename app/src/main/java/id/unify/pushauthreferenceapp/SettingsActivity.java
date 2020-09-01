@@ -7,10 +7,12 @@
 package id.unify.pushauthreferenceapp;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
@@ -22,6 +24,8 @@ import id.unify.sdk.core.UnifyID;
 import id.unify.sdk.core.UnifyIDConfig;
 import id.unify.sdk.core.UnifyIDException;
 import id.unify.sdk.pushauth.PushAuth;
+import id.unify.sdk.pushauth.PushAuthException;
+import id.unify.sdk.pushauth.TokenRegistrationHandler;
 
 public class SettingsActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -61,6 +65,17 @@ public class SettingsActivity extends AppCompatActivity {
         binding.settingActivityPb.setVisibility(View.GONE);
     }
 
+    private void showDeregisterFailureDialog() {
+        new AlertDialog
+                .Builder(SettingsActivity.this)
+                .setTitle("PushAuth Deregister Failed")
+                .setMessage(
+                        "Currently registered PushAuth client wasn't "
+                                + "deregistered "
+                                + "successfully, please retry submit.")
+                .show();
+    }
+
     private View.OnClickListener confirmButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -69,19 +84,75 @@ public class SettingsActivity extends AppCompatActivity {
             final String sdkKey = binding.sdkKeyInput.getText().toString().trim();
             final String user = binding.userInput.getText().toString().trim();
 
+            final boolean[] deregistered = {false};
+            if (PushAuth.getInstance() != null) {
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            PushAuth.getInstance().deregisterCurrentClient();
+                            deregistered[0] = true;
+                        } catch (PushAuthException e) {
+                            Log.e(TAG, "Failed to deregister PushAuth client", e);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showDeregisterFailureDialog();
+                                }
+                            });
+                        }
+                    }
+                });
+
+                t.start();
+
+                try {
+                    t.join();
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "Deregister thread is interrupted", e);
+                    showDeregisterFailureDialog();
+                    return;
+                }
+
+                if (!deregistered[0]) {
+                    return;
+                }
+            }
+
             UnifyID.initialize(getApplicationContext(), sdkKey, user, new CompletionHandler() {
                 @Override
                 public void onCompletion(UnifyIDConfig config) {
                     Log.d(TAG, "UnifyID initialization successful");
                     PushAuth.initialize(getApplicationContext(), config);
                     storeConfiguration(sdkKey, user);
-                    Utils.showAllPendingPushAuth(PushAuth.getInstance());
 
-                    // close activity with result
-                    Intent intent = new Intent();
-                    intent.putExtra(MainActivity.SETTING_ACTIVITY_RESULT_KEY, true);
-                    setResult(MainActivity.SETTING_ACTIVITY_REQUEST_CODE, intent);
-                    finish();
+                    PushAuth.getInstance().registerPushAuthToken(new TokenRegistrationHandler() {
+                        @Override
+                        public void onComplete() {
+                            Utils.showAllPendingPushAuth(PushAuth.getInstance());
+
+                            // close activity with result
+                            Intent intent = new Intent();
+                            intent.putExtra(MainActivity.SETTING_ACTIVITY_RESULT_KEY, true);
+                            setResult(MainActivity.SETTING_ACTIVITY_REQUEST_CODE, intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new AlertDialog
+                                            .Builder(SettingsActivity.this)
+                                            .setTitle("PushAuth Token Registration Failed")
+                                            .setMessage("PushAuth is not fully initialized, "
+                                                    + "please submit again to recover.")
+                                            .show();
+                                }
+                            });
+                        }
+                    });
                 }
 
                 @Override
