@@ -1,6 +1,7 @@
 package id.unify.pushauthreferenceapp;
 
 import android.app.Activity;
+import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -8,9 +9,12 @@ import java.util.List;
 
 import id.unify.sdk.core.UnifyIDException;
 import id.unify.sdk.pushauth.PushAuth;
+import id.unify.sdk.pushauth.PushAuthException;
 import id.unify.sdk.pushauth.PushAuthMessage;
 
 public class Utils {
+    private static final String TAG = "Utils";
+
     static public void displayUnifyIDException(UnifyIDException e, final Activity activity) {
         String msg = "Unknown exception happened, PushAuth feature won't work correctly.";
         switch (e.getErrorCode()) {
@@ -57,11 +61,15 @@ public class Utils {
     }
 
     static public void showAllPendingPushAuth(PushAuth pushAuth) {
-        List<PushAuthMessage> pendingPushAuth = pushAuth.getPendingPushAuth();
-        if (!pendingPushAuth.isEmpty()) {
-            for (PushAuthMessage pushAuthMessage: pendingPushAuth) {
-                pushAuth.showPushAuth(pushAuthMessage);
+        try {
+            List<PushAuthMessage> pendingPushAuth = pushAuth.getPendingPushAuth();
+            if (!pendingPushAuth.isEmpty()) {
+                for (PushAuthMessage pushAuthMessage: pendingPushAuth) {
+                    pushAuth.showPushAuth(pushAuthMessage);
+                }
             }
+        } catch (PushAuthException e) {
+            Log.e(TAG, "Failed to get pending PushAuth messages", e);
         }
     }
 }

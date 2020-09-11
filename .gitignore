@@ -67,3 +67,5 @@ lint/outputs/
 lint/tmp/
 
 .DS_Store
+
+app/release
