@@ -76,6 +76,75 @@ public class SettingsActivity extends AppCompatActivity {
                 .show();
     }
 
+    private boolean deregisterUnifyID() {
+        boolean deregistered = false;
+        try {
+            PushAuth.getInstance().deregisterCurrentClient();
+            deregistered = true;
+        } catch (PushAuthException e) {
+            Log.e(TAG, "Failed to deregister PushAuth client", e);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showDeregisterFailureDialog();
+                    hideConfirmUI();
+                }
+            });
+        }
+        return deregistered;
+    }
+
+    private void setupUnifyID(final String sdkKey, final String user) {
+        UnifyID.initialize(getApplicationContext(), sdkKey, user, new CompletionHandler() {
+            @Override
+            public void onCompletion(UnifyIDConfig config) {
+                Log.d(TAG, "UnifyID initialization successful");
+                PushAuth.initialize(getApplicationContext(), config);
+                storeConfiguration(sdkKey, user);
+
+                PushAuth.getInstance().registerPushAuthToken(new TokenRegistrationHandler() {
+                    @Override
+                    public void onComplete() {
+                        Utils.showAllPendingPushAuth(PushAuth.getInstance());
+
+                        // close activity with result
+                        Intent intent = new Intent();
+                        intent.putExtra(MainActivity.SETTING_ACTIVITY_RESULT_KEY, true);
+                        setResult(MainActivity.SETTING_ACTIVITY_REQUEST_CODE, intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new AlertDialog
+                                        .Builder(SettingsActivity.this)
+                                        .setTitle("PushAuth Token Registration Failed")
+                                        .setMessage("PushAuth is not fully initialized, "
+                                                + "please submit again to recover.")
+                                        .show();
+                            }
+                        });
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(UnifyIDException e) {
+                Log.e(TAG, "UnifyID initialization failed", e);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        hideConfirmUI();
+                    }
+                });
+                Utils.displayUnifyIDException(e, SettingsActivity.this);
+            }
+        });
+    }
+
     private View.OnClickListener confirmButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -84,89 +153,17 @@ public class SettingsActivity extends AppCompatActivity {
             final String sdkKey = binding.sdkKeyInput.getText().toString().trim();
             final String user = binding.userInput.getText().toString().trim();
 
-            final boolean[] deregistered = {false};
-            if (PushAuth.getInstance() != null) {
-                Thread t = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            PushAuth.getInstance().deregisterCurrentClient();
-                            deregistered[0] = true;
-                        } catch (PushAuthException e) {
-                            Log.e(TAG, "Failed to deregister PushAuth client", e);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    showDeregisterFailureDialog();
-                                }
-                            });
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (PushAuth.getInstance() != null) {
+                        if (!deregisterUnifyID()) {
+                            return;
                         }
                     }
-                });
-
-                t.start();
-
-                try {
-                    t.join();
-                } catch (InterruptedException e) {
-                    Log.e(TAG, "Deregister thread is interrupted", e);
-                    showDeregisterFailureDialog();
-                    return;
+                    setupUnifyID(sdkKey, user);
                 }
-
-                if (!deregistered[0]) {
-                    return;
-                }
-            }
-
-            UnifyID.initialize(getApplicationContext(), sdkKey, user, new CompletionHandler() {
-                @Override
-                public void onCompletion(UnifyIDConfig config) {
-                    Log.d(TAG, "UnifyID initialization successful");
-                    PushAuth.initialize(getApplicationContext(), config);
-                    storeConfiguration(sdkKey, user);
-
-                    PushAuth.getInstance().registerPushAuthToken(new TokenRegistrationHandler() {
-                        @Override
-                        public void onComplete() {
-                            Utils.showAllPendingPushAuth(PushAuth.getInstance());
-
-                            // close activity with result
-                            Intent intent = new Intent();
-                            intent.putExtra(MainActivity.SETTING_ACTIVITY_RESULT_KEY, true);
-                            setResult(MainActivity.SETTING_ACTIVITY_REQUEST_CODE, intent);
-                            finish();
-                        }
-
-                        @Override
-                        public void onFailure(Exception e) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    new AlertDialog
-                                            .Builder(SettingsActivity.this)
-                                            .setTitle("PushAuth Token Registration Failed")
-                                            .setMessage("PushAuth is not fully initialized, "
-                                                    + "please submit again to recover.")
-                                            .show();
-                                }
-                            });
-                        }
-                    });
-                }
-
-                @Override
-                public void onFailure(UnifyIDException e) {
-                    Log.e(TAG, "UnifyID initialization failed", e);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            hideConfirmUI();
-                        }
-                    });
-                    Utils.displayUnifyIDException(e, SettingsActivity.this);
-                }
-            });
+            }).start();
         }
     };
 }
