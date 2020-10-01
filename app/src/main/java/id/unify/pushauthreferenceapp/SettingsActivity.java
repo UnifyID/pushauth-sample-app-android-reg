@@ -42,17 +42,22 @@ public class SettingsActivity extends AppCompatActivity {
     private void setup() {
         String existingSdkKey = Preferences.getString(Preferences.SDK_KEY);
         String existingUser = Preferences.getString(Preferences.USER);
+        String existingPairingCode = Preferences.getString(Preferences.PAIRING_CODE);
         if (!Strings.isNullOrEmpty(existingSdkKey)) {
             binding.sdkKeyInput.setText(existingSdkKey);
         }
         if (!Strings.isNullOrEmpty(existingUser)) {
             binding.userInput.setText(existingUser);
         }
+        if (!Strings.isNullOrEmpty(existingPairingCode)) {
+            binding.pairingCodeInput.setText(existingPairingCode);
+        }
     }
 
-    private void storeConfiguration(String sdkKey, String user) {
+    private void storeConfiguration(String sdkKey, String user, String pairingCode) {
         Preferences.put(Preferences.SDK_KEY, sdkKey);
         Preferences.put(Preferences.USER, user);
+        Preferences.put(Preferences.PAIRING_CODE, pairingCode);
     }
 
     private void showConfirmUI() {
@@ -94,13 +99,13 @@ public class SettingsActivity extends AppCompatActivity {
         return deregistered;
     }
 
-    private void setupUnifyID(final String sdkKey, final String user) {
-        UnifyID.initialize(getApplicationContext(), sdkKey, user, new CompletionHandler() {
+    private void setupUnifyID(final String sdkKey, final String user, final String pairingCode) {
+        UnifyID.initialize(getApplicationContext(), sdkKey, user, pairingCode, new CompletionHandler() {
             @Override
             public void onCompletion(UnifyIDConfig config) {
                 Log.d(TAG, "UnifyID initialization successful");
                 PushAuth.initialize(getApplicationContext(), config);
-                storeConfiguration(sdkKey, user);
+                storeConfiguration(sdkKey, user, pairingCode);
 
                 PushAuth.getInstance().registerPushAuthToken(new TokenRegistrationHandler() {
                     @Override
@@ -152,6 +157,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             final String sdkKey = binding.sdkKeyInput.getText().toString().trim();
             final String user = binding.userInput.getText().toString().trim();
+            final String pairingCode = binding.pairingCodeInput.getText().toString().trim();
 
             new Thread(new Runnable() {
                 @Override
@@ -161,7 +167,7 @@ public class SettingsActivity extends AppCompatActivity {
                             return;
                         }
                     }
-                    setupUnifyID(sdkKey, user);
+                    setupUnifyID(sdkKey, user, pairingCode);
                 }
             }).start();
         }

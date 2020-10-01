@@ -8,12 +8,14 @@
     <string name="app_name">PushAuth Reference App</string>
     <string name="sdk_key_text">SDK Key</string>
     <string name="user_id_text">User</string>
+    <string name="pairing_code_text">Pairing Code</string>
     <string name="confirm_text">Confirm</string>
     <string name="header_description">UnifyID Logo</string>
-    <string name="configuration_help_text">Configure your PushAuth SDK key and user by tapping the gear icon above.</string>
+    <string name="configuration_help_text">Configure the PushAuth sample app by tapping the gear icon above.</string>
     <string name="pushauth_info_container_title">Waiting for PushAuth requests</string>
     <string name="configuration_help_title">Configuration</string>
-    <string name="configuration_input_hint">PushAuth Key and User</string>
+    <string name="configuration_input_hint">PushAuth SDK Key, User, and Pairing Code</string>
     <string name="sdk_key_input_hint">SDK Key</string>
     <string name="user_input_hint">User</string>
+    <string name="pairing_code_input_hint">Pairing Code</string>
 </resources>
