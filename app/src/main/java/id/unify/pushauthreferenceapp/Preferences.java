@@ -9,6 +9,7 @@ public class Preferences {
             "id.unify.pushauthreferenceapp.SHARED_PREFERENCES";
     public static final String SDK_KEY = "id.unify.pushauthreferenceapp.SHARED_PREFERENCES.SDK_KEY";
     public static final String USER = "id.unify.pushauthreferenceapp.SHARED_PREFERENCES.USER";
+    public static final String PAIRING_CODE = "id.unify.pushauthreferenceapp.SHARED_PREFERENCES.PAIRING_CODE";
 
     private Preferences() {
     }

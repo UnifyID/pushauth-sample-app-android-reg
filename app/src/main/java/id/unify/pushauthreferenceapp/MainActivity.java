@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity {
             if (sdkInitialized) {
                 String sdkKey = Preferences.getString(Preferences.SDK_KEY);
                 String user = Preferences.getString(Preferences.USER);
-                boolean appConfigured = !Strings.isNullOrEmpty(sdkKey) && !Strings.isNullOrEmpty(user);
+                String pairingCode = Preferences.getString(Preferences.PAIRING_CODE);
+                boolean appConfigured = !Strings.isNullOrEmpty(sdkKey) && !Strings.isNullOrEmpty(user) && !Strings.isNullOrEmpty(pairingCode);
                 if (appConfigured) {
                     showPushAuthInfoContainer(user);
                 } else {
@@ -93,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
         binding.configuredUser.setText("User: " + user);
     }
 
-    private void setupPushAuth(String sdkKey, String user) {
-        UnifyID.initialize(getApplicationContext(), sdkKey, user, new CompletionHandler() {
+    private void setupPushAuth(String sdkKey, String user, String pairingCode) {
+        UnifyID.initialize(getApplicationContext(), sdkKey, user, pairingCode, new CompletionHandler() {
             @Override
             public void onCompletion(UnifyIDConfig config) {
                 Log.d(TAG, "UnifyID initialization successful");
@@ -135,11 +136,12 @@ public class MainActivity extends AppCompatActivity {
 
         String sdkKey = Preferences.getString(Preferences.SDK_KEY);
         String user = Preferences.getString(Preferences.USER);
-        boolean appConfigured = !Strings.isNullOrEmpty(sdkKey) && !Strings.isNullOrEmpty(user);
+        String pairingCode = Preferences.getString(Preferences.PAIRING_CODE);
+        boolean appConfigured = !Strings.isNullOrEmpty(sdkKey) && !Strings.isNullOrEmpty(user) && !Strings.isNullOrEmpty(pairingCode);
         if (appConfigured) {
             showPushAuthInfoContainer(user);
             if (PushAuth.getInstance() == null) {
-                setupPushAuth(sdkKey, user);
+                setupPushAuth(sdkKey, user, pairingCode);
             }
         } else {
             // If app not configured, show setup text to prompt user to do that
